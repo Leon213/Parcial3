@@ -11,7 +11,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-        <title>Tarea Guia 10</title>
+        <title>Parcial 3</title>
 
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -44,7 +44,7 @@
             <h3>Error!</h3>
             <p>Hola profesor lo sentimos no puedes acceder de esta forma a esta pagina por favor da click sobre el boton
                 e ingresa con tu usuario y contrase&ntilde;a, Gracias</p>
-            <a href="index.jsp"><input class="btn btn-success" value="Regresar"/></a>
+            <a href="index.jsp">Regresar</a>
         </div>
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

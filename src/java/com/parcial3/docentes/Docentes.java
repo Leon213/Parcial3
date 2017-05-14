@@ -6,6 +6,7 @@
 package com.parcial3.docentes;
 
 import com.docentes.conexion.Conexion;
+import com.parcial3.bean.docenteBean;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,6 +21,15 @@ public class Docentes {
     Conexion myConn = new Conexion();
     PreparedStatement myPstat;
     ResultSet myRs;
+    private static String usuario;
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
     
     public ResultSet Datos(String usr, String pwd){
         try {
@@ -35,6 +45,70 @@ public class Docentes {
             Logger.getLogger(Docentes.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
+    }
+    
+    private int cantidadUsuarios(String usuario){
+        int i = 0;
+        
+        try {
+            myConn.conectar();
+            myPstat = myConn.con.prepareStatement("select count(*) as kount from docentes where usuario=?");
+            myPstat.setString(1, usuario);
+            myRs = myPstat.executeQuery();
+            
+            if(myRs.next())
+                i = myRs.getInt(1);
+            
+            return i;
+        } catch (SQLException ex) {
+            Logger.getLogger(Docentes.class.getName()).log(Level.SEVERE, null, ex);
+            return 0;
+        }
+    }
+    
+    public int addDocente(){
+        
+        docenteBean dBea = new docenteBean();
+        String nombreP = dBea.getpNombre();
+        String nombreS = dBea.getsNombre();
+        String apellP = dBea.getpApellido();
+        String apellS = dBea.getsApellido();
+        String escuela = dBea.getSchool();
+        String usurio = dBea.userAndPass();
+        int i = 0, school = 0, can = 0;
+        
+        can = this.cantidadUsuarios(usurio);
+        school = Integer.parseInt(escuela);
+        
+        if(can > 0){
+            can = can + 1;
+            usurio = usurio + Integer.toString(can);
+        }
+        
+        try {
+            myConn.conectar();
+            myPstat = myConn.con.prepareStatement("insert into docentes(pNombre, sNombre, pApellido, sApellido, usuario, passwrd, rol, escuela) values(?,?,?,?,?,?,?,?)");
+            myPstat.setString(1, nombreP);
+            myPstat.setString(2, nombreS);
+            myPstat.setString(3, apellP);
+            myPstat.setString(4, apellS);
+            myPstat.setString(5, usurio);
+            myPstat.setString(6, usurio);
+            myPstat.setInt(7, 2);
+            myPstat.setInt(8, school);
+            
+            i = myPstat.executeUpdate();
+            
+            if(i > 0)
+                this.setUsuario(usurio);
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Docentes.class.getName()).log(Level.SEVERE, null, ex);
+            i = -1;
+        }
+        
+        return i;
     }
     
     public ResultSet Datos(String usr){

@@ -71,8 +71,33 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
+                        <%
+                                Docentes doc = new Docentes();
+                                ResultSet rs = doc.Datos(mySession.getAttribute("userName").toString());
+                                String pNombre = "", pApellido = "";
+                                String sNombre = "";
+                                String sApellido = "", usuario = "";
+                                int rol = 0;
+                                
+                                if(rs.next()){
+                                    pNombre = rs.getString(2);
+                                    sNombre = rs.getString(3);
+                                    pApellido = rs.getString(4);
+                                    sApellido = rs.getString(5);
+                                    usuario = rs.getString(6);
+                                    rol = rs.getInt(8);
+                                }
+                                
+                                if(rol == 1){
+                            %>
                             <li><a href="inputdoc.jsp">Ingesar Docentes</a></li>
                             <li><a href="inputvisita.jsp">Ingresar Visitas</a></li>
+                            <li><a href="visitas.jsp">Ver Visitas</a></li>
+                            <%
+                                } else{
+                            %>
+                            <li><a href="visitas.jsp">Ver Visitas</a></li>
+                            <% }%>
                     </ul>
 
                     <ul class="nav navbar-nav navbar-right">
@@ -93,26 +118,19 @@
                 <div class="col-md-4 well" id="leftPanel">
                     <div class="row">
                         <div class="col-md-12">
-                            <%
-                                Docentes doc = new Docentes();
-                                ResultSet rs = doc.Datos(mySession.getAttribute("userName").toString());
-                                String pNombre = "", pApellido = "";
-                                String sNombre = "";
-                                String sApellido = "";
-                                
-                                if(rs.next()){
-                                    pNombre = rs.getString(2);
-                                    sNombre = rs.getString(3);
-                                    pApellido = rs.getString(4);
-                                    sApellido = rs.getString(5);
-                                }
-                            %>
+                            
                             <div>
                                 <img src="img/usuario.png" alt="Usuario" class="img-circle img-thumbnail">
                                 <h2><%= pNombre %> <%= pApellido %></h2>
                                     <p>Bienvenido <%= pNombre %> estas en la interfaz principal del sistema web aqui podras 
                                         realiza todas las acciones que necesitas como docente solo debes de seleccionarlas en el menu de la 
                                         parte superior de la pagina</p>
+                                    <br/>
+                                    <%
+                                        if(request.getParameter("nuevousuario") != null){
+                                    %>
+                                    <p>La contrase&ntilde;a y usuario para el nuevo docente es: <%= request.getParameter("nuevousuario") %></p>
+                                    <% } %>
                                 </div>
                             </div>
                         </div>
@@ -126,29 +144,29 @@
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-6 col-md-6">
                                             <div class="form-group">
-                                                <input type="text" name="first_name" id="first_name" class="form-control input-lg" placeholder="Primer Nombre" tabindex="1">
+                                                <input type="text" name="first_name" id="first_name" class="form-control input-lg" placeholder="Primer Nombre" value="<%= pNombre %>" tabindex="1">
                                             </div>
                                         </div>
                                         <div class="col-xs-12 col-sm-6 col-md-6">
                                             <div class="form-group">
-                                                <input type="text" name="middle_name" id="middle_name" class="form-control input-lg" placeholder="Segundo Nombre" tabindex="2">
+                                                <input type="text" name="middle_name" id="middle_name" class="form-control input-lg" placeholder="Segundo Nombre" value="<%= sNombre %>" tabindex="2">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-6 col-md-6">
                                             <div class="form-group">
-                                                <input type="text" name="last_name" id="last_name" class="form-control input-lg" placeholder="Primer Apellido" tabindex="3">
+                                                <input type="text" name="last_name" id="last_name" class="form-control input-lg" placeholder="Primer Apellido" value="<%= pApellido %>" tabindex="3">
                                             </div>
                                         </div>
                                         <div class="col-xs-12 col-sm-6 col-md-6">
                                             <div class="form-group">
-                                                <input type="text" name="sur_name" id="sur_name" class="form-control input-lg" placeholder="Segundo Apellido" tabindex="4">
+                                                <input type="text" name="sur_name" id="sur_name" class="form-control input-lg" placeholder="Segundo Apellido" value="<%= sApellido %>" tabindex="4">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" name="user_name" id="username" class="form-control input-lg" placeholder="Ususario" tabindex="5" required>
+                                        <input type="text" name="user_name" id="username" class="form-control input-lg" placeholder="Ususario" value="<%= usuario %>" tabindex="5" required>
                                     </div>
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-6 col-md-6">

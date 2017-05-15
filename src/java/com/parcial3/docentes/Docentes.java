@@ -47,6 +47,20 @@ public class Docentes {
         }
     }
     
+    public ResultSet getDocentes(int id){
+        try {
+            myConn.conectar();
+            myPstat = myConn.con.prepareStatement("SELECT `idDocentes`, CONCAT(pNombre, ' ', sNombre, ' ' , pApellido, ' ', sApellido) as nombres FROM docentes WHERE rol = ?");
+            myPstat.setInt(1, id);
+            myRs = myPstat.executeQuery();
+            
+            return myRs;
+        } catch (SQLException ex) {
+            Logger.getLogger(Docentes.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+    
     private int cantidadUsuarios(String usuario){
         int i = 0;
         

@@ -51,6 +51,20 @@ public class Visitas {
         return i;
     }
     
+    public ResultSet misVisitas(int myId){
+        try {
+            myCon.conectar();
+            myPstat = myCon.con.prepareStatement("select concat(docentes.pnombre, ' ', docentes.pApellido) as Nombres, visitas.fechaVisita, visitas.Institucion from visitas join docentes on docentes.idDocentes = visitas.docente WHERE visitas.docente = ?");
+            myPstat.setInt(1, myId);
+            myRs = myPstat.executeQuery();
+            
+            return myRs;
+        } catch (SQLException ex) {
+            Logger.getLogger(Visitas.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+    
     private String formatoFecha(String anyo, String mes, String dia) {
         switch (mes) {
             case "Enero":

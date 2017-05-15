@@ -50,7 +50,7 @@
     <body>
         <%
             HttpSession mySession = request.getSession();
-            if(mySession.getAttribute("idUser") == null){
+            if (mySession.getAttribute("idUser") == null) {
                 response.sendRedirect("error.jsp");
             } else {
         %>
@@ -72,31 +72,33 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         <%
-                                Docentes doc = new Docentes();
-                                ResultSet rs = doc.Datos(mySession.getAttribute("userName").toString());
-                                String pNombre = "", pApellido = "";
-                                String sNombre = "";
-                                String sApellido = "", usuario = "";
-                                int rol = 0;
-                                
-                                if(rs.next()){
-                                    pNombre = rs.getString(2);
-                                    sNombre = rs.getString(3);
-                                    pApellido = rs.getString(4);
-                                    sApellido = rs.getString(5);
-                                    usuario = rs.getString(6);
-                                    rol = rs.getInt(8);
-                                }
-                                
-                                if(rol == 1){
-                            %>
-                            <li><a href="inputdoc.jsp">Ingesar Docentes</a></li>
-                            <li><a href="inputvisita.jsp">Ingresar Visitas</a></li>
-                            <li><a href="visitas.jsp">Ver Visitas</a></li>
+                            Docentes doc = new Docentes();
+                            ResultSet rs = doc.Datos(mySession.getAttribute("userName").toString());
+                            String pNombre = "", pApellido = "";
+                            String sNombre = "";
+                            String sApellido = "", usuario = "";
+                            int rol = 0;
+                            int id = 0;
+
+                            if (rs.next()) {
+                                id = rs.getInt(1);
+                                pNombre = rs.getString(2);
+                                sNombre = rs.getString(3);
+                                pApellido = rs.getString(4);
+                                sApellido = rs.getString(5);
+                                usuario = rs.getString(6);
+                                rol = rs.getInt(8);
+                            }
+
+                            if (rol == 1) {
+                        %>
+                        <li><a href="inputdoc.jsp">Ingesar Docentes</a></li>
+                        <li><a href="inputvisita.jsp">Ingresar Visitas</a></li>
+                        <li><a href="visitas.jsp">Ver Visitas</a></li>
                             <%
-                                } else{
+                            } else {
                             %>
-                            <li><a href="visitas.jsp">Ver Visitas</a></li>
+                        <li><a href="misvisitas.jsp">Ver Visitas</a></li>
                             <% }%>
                     </ul>
 
@@ -118,85 +120,111 @@
                 <div class="col-md-4 well" id="leftPanel">
                     <div class="row">
                         <div class="col-md-12">
-                            
+
                             <div>
                                 <img src="img/usuario.png" alt="Usuario" class="img-circle img-thumbnail">
-                                <h2><%= pNombre %> <%= pApellido %></h2>
-                                    <p>Bienvenido <%= pNombre %> estas en la interfaz principal del sistema web aqui podras 
-                                        realiza todas las acciones que necesitas como docente solo debes de seleccionarlas en el menu de la 
-                                        parte superior de la pagina</p>
-                                    <br/>
-                                    <%
-                                        if(request.getParameter("nuevousuario") != null){
-                                    %>
-                                    <p>La contrase&ntilde;a y usuario para el nuevo docente es: <%= request.getParameter("nuevousuario") %></p>
-                                    <% } %>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-8 well" id="rightPanel">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <form role="form" id="miform" action="#" method="POST">
-                                    <h2>Edita tu perfil.<small>Siempre es facil.</small></h2>
-                                    <hr class="colorgraph">
-                                    <div class="row">
-                                        <div class="col-xs-12 col-sm-6 col-md-6">
-                                            <div class="form-group">
-                                                <input type="text" name="first_name" id="first_name" class="form-control input-lg" placeholder="Primer Nombre" value="<%= pNombre %>" tabindex="1">
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-6 col-md-6">
-                                            <div class="form-group">
-                                                <input type="text" name="middle_name" id="middle_name" class="form-control input-lg" placeholder="Segundo Nombre" value="<%= sNombre %>" tabindex="2">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xs-12 col-sm-6 col-md-6">
-                                            <div class="form-group">
-                                                <input type="text" name="last_name" id="last_name" class="form-control input-lg" placeholder="Primer Apellido" value="<%= pApellido %>" tabindex="3">
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-6 col-md-6">
-                                            <div class="form-group">
-                                                <input type="text" name="sur_name" id="sur_name" class="form-control input-lg" placeholder="Segundo Apellido" value="<%= sApellido %>" tabindex="4">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" name="user_name" id="username" class="form-control input-lg" placeholder="Ususario" value="<%= usuario %>" tabindex="5" required>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xs-12 col-sm-6 col-md-6">
-                                            <div class="form-group">
-                                                <input type="password" name="password" id="password" class="form-control input-lg" placeholder="Password" tabindex="6">
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-6 col-md-6">
-                                            <div class="form-group">
-                                                <input type="password" name="password_confirmation" id="password_confirmation" class="form-control input-lg" placeholder="Confirm Password" tabindex="7">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <hr class="colorgraph">
-                                    <div class="row">
-                                        <div class="col-xs-12 col-md-6"></div>
-                                        <div class="col-xs-12 col-md-6"><input type="submit" class="btn btn-success btn-block btn-lg"></input></div>
-                                    </div>
-                                </form>
+                                <h2><%= pNombre%> <%= pApellido%></h2>
+                                <p>Bienvenido <%= pNombre%> estas en la interfaz principal del sistema web aqui podras 
+                                    realiza todas las acciones que necesitas como docente solo debes de seleccionarlas en el menu de la 
+                                    parte superior de la pagina</p>
+                                <br/>
+                                <%
+                                    if (request.getParameter("nuevousuario") != null) {
+                                %>
+                                <p>La contrase&ntilde;a y usuario para el nuevo docente es: <%= request.getParameter("nuevousuario")%></p>
+                                <% }%>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>       
-        </div>
-        <!-- Fin del contenido -->
+                <div class="col-md-8 well" id="rightPanel">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form role="form" id="miform" action="#" method="POST">
+                                <h2>Edita tu perfil.<small>Siempre es facil.</small></h2>
+                                <hr class="colorgraph">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-6 col-md-6">
+                                        <div class="form-group">
+                                            <input type="text" required name="first_name" id="first_name" class="form-control input-lg" placeholder="Primer Nombre" value="<%= pNombre%>" tabindex="1">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6">
+                                        <div class="form-group">
+                                            <input type="text" name="middle_name" id="middle_name" class="form-control input-lg" placeholder="Segundo Nombre" value="<%= sNombre%>" tabindex="2">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-6 col-md-6">
+                                        <div class="form-group">
+                                            <input type="text" required name="last_name" id="last_name" class="form-control input-lg" placeholder="Primer Apellido" value="<%= pApellido%>" tabindex="3">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6">
+                                        <div class="form-group">
+                                            <input type="text" name="sur_name" id="sur_name" class="form-control input-lg" placeholder="Segundo Apellido" value="<%= sApellido%>" tabindex="4">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" name="user_name" id="username" class="form-control input-lg" placeholder="Ususario" value="<%= usuario%>" tabindex="5" required>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-6 col-md-6">
+                                        <div class="form-group">
+                                            <input type="password" name="password" id="password" class="form-control input-lg" placeholder="Password" tabindex="6">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-6">
+                                        <div class="form-group">
+                                            <input type="password" name="password_confirmation" id="password_confirmation" class="form-control input-lg" placeholder="Confirm Password" tabindex="7">
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="colorgraph">
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-6"></div>
+                                    <div class="col-xs-12 col-md-6"><input type="submit" name="actualizar" class="btn btn-success btn-block btn-lg"></input></div>
+                                </div>
+                            </form>
+                        </div>
+                        <%
+                            String newUsr = request.getParameter("user_name");
+                            int verUser = doc.verificarUsuario(newUsr);
+
+                            if (verUser > 0) {
+                                out.write("<p>El usuario ya exite</p>");
+                            } else if(request.getParameter("actualizar") != null) {
+                                if (request.getParameter("password") == null || request.getParameter("password_confirmation") == null) {
+                                    out.write("<p>Los campos password son obligatorios</p>");
+                                } else {
+                                    String pNombre1 = request.getParameter("first_name");
+                                    String sNombre1 = request.getParameter("middle_name");
+                                    String pApe = request.getParameter("last_name");
+                                    String sApe = request.getParameter("sur_name");
+                                    String passs = request.getParameter("password");
+                                    String passs1 = request.getParameter("password_confirmation");
+                                    if (passs.equals(passs1)) {
+                                        verUser = doc.updateDocPass(pNombre1, sNombre1, pApe, sApe, newUsr, passs, id);
+                                        if(verUser > 0){
+                                            out.write("<p>Actualizado</p>");
+                                        }
+                                    }
+                                }
+                            }
+
+                        %>
+                    </div>
+                </div>
+            </div>
+        </div>       
+    </div>
+    <!-- Fin del contenido -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
-    <% } %>
+    <% }%>
 </body>
 </html>

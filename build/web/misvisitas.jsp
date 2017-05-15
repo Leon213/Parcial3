@@ -1,15 +1,14 @@
 <%-- 
-    Document   : inputdoc
-    Created on : 14-may-2017, 13:47:05
+    Document   : misvisitas
+    Created on : 14-may-2017, 19:13:15
     Author     : Leonel
 --%>
 
-<%@page import="com.parcial3.escuela.Escuela"%>
+<%@page import="com.parcial3.visitas.Visitas"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="com.parcial3.docentes.Docentes"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page session="true" %>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -18,14 +17,13 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-        <title>Parcial 3</title>
+        <title>Tercer Parcial</title>
 
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
 
-
     </head>
-    
+    <body>
         <%
             HttpSession mySession = request.getSession();
             if (mySession.getAttribute("idUser") == null) {
@@ -52,16 +50,11 @@
                         <%
                             Docentes doc = new Docentes();
                             ResultSet rs = doc.Datos(mySession.getAttribute("userName").toString());
-                            String pNombre = "", pApellido = "";
-                            String sNombre = "";
-                            String sApellido = "";
                             int rol = 0;
+                            int id = 0;
 
                             if (rs.next()) {
-                                pNombre = rs.getString(2);
-                                sNombre = rs.getString(3);
-                                pApellido = rs.getString(4);
-                                sApellido = rs.getString(5);
+                                id = rs.getInt(1);
                                 rol = rs.getInt(8);
                             }
 
@@ -85,62 +78,38 @@
         </nav>
         <!-- fin menu bar -->
 
-        <!-- Contenido de la pagina -->
         <div class="container jumbotron">
-            <form action="inputdoc.jsp" method="post" name="indoc">
-                <div class="form-group">
-                    <label for="nombreP">Primer Nombre</label>
-                    <input type="text" class="form-control" id="nombreP" name="pNombre" placeholder="Luis" required>
-                </div>
-                <div class="form-group">
-                    <label for="nombreS">Segundo Nombre</label>
-                    <input type="text" class="form-control" id="nombreS" name="sNombre" placeholder="David">
-                </div>
-                <div class="form-group">
-                    <label for="apellidoP">Primer Apellido</label>
-                    <input type="text" class="form-control" id="apellidoP" name="pApellido" placeholder="Villalta" required>
-                </div>
-                <div class="form-group">
-                    <label for="apellidoS">Segundo Apellido</label>
-                    <input type="text" class="form-control" id="apellidoS" name="sApellido" placeholder="Villalta">
-                </div>
-                <div class="form-group">
-                    <label for="escuelas">Escuela</label>
-                    <select class="form-control" id="escuelas" name="school">
-                        <%
-                        Escuela esc = new Escuela();
-                        rs = esc.getRoles();
-                        
-                        while(rs.next()){
-                    %>
-                    <option value="<%= rs.getInt(1) %>"><%= rs.getString(2)%></option>
-                        <%
-                            }
-                        %>
-                    </select>
-                </div>
-                <button type="submit" name="btnIngresar" class="btn btn-primary">Registrar</button>
-            </form>
-            <%
-                if(request.getParameter("btnIngresar") != null){%>
-                <jsp:useBean id="actualizar" scope="request" class="com.parcial3.bean.docenteBean">
-                    <jsp:setProperty name="actualizar" property="*" />
-                </jsp:useBean>        
-            <%   
-                int actu = 0; 
-                actu = doc.addDocente();
-                
-                if(actu > 0){
-                    response.sendRedirect("home.jsp?nuevousuario="+doc.getUsuario()+"");
-                }
-                }
-            %>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Docente</th>
+                        <th>Fecha</th>
+                        <th>Institucion</th>
+                    </tr>
+                </thead>
+                <%
+                    Visitas vis = new Visitas();
+                    rs = vis.misVisitas(id);
+
+                    if (rs != null) {
+                        while (rs.next()) {%>
+
+                <tr>
+                    <td><%= rs.getString(1)%></td>
+                    <td><%= rs.getDate(2)%></td>
+                    <td><%= rs.getString(3)%></td>
+                </tr>
+                <%      }
+                } else {
+                %>
+                <p>No posees visitas</p>
+                <% } %>
+            </table>
         </div>
-        <!-- Fin del contenido -->
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="js/bootstrap.min.js"></script>
         <% }%>
-    
+    </body>
 </html>

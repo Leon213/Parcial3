@@ -65,7 +65,7 @@
                             <%
                             } else {
                             %>
-                        <li><a href="visitas.jsp">Ver Visitas</a></li>
+                        <li><a href="misvisitas.jsp">Ver Visitas</a></li>
                             <% }%>
                     </ul>
 

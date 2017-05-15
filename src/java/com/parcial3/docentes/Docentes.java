@@ -61,6 +61,45 @@ public class Docentes {
         }
     }
     
+    public int verificarUsuario(String usuario){
+        int i = 0;
+        try {
+            myConn.conectar();
+            myPstat = myConn.con.prepareStatement("SELECT * FROM docentes WHERE usuario = ?");
+            myPstat.setString(1, usuario);
+            myRs = myPstat.executeQuery();
+            
+            if(myRs.next())
+                i = 100;
+            return i;
+        } catch (SQLException ex) {
+            Logger.getLogger(Docentes.class.getName()).log(Level.SEVERE, null, ex);
+            return -1;
+        }
+    }
+    
+    public int updateDocPass(String pName, String sName, String pApell, String sApell, String user, String pass, int id){
+        int i = 0;
+        
+        try {
+            myPstat = myConn.con.prepareStatement("UPDATE docentes SET pNombre=?,sNombre=?,pApellido=?,sApellido=?,usuario=?,passwrd=? WHERE idDocentes=?");
+            myPstat.setString(1, pName);
+            myPstat.setString(2, sName);
+            myPstat.setString(3, pApell);
+            myPstat.setString(4, sApell);
+            myPstat.setString(5, user);
+            myPstat.setString(6, pass);
+            myPstat.setInt(7, id);
+            
+            i = myPstat.executeUpdate();
+            
+            return i;
+        } catch (SQLException ex) {
+            Logger.getLogger(Docentes.class.getName()).log(Level.SEVERE, null, ex);
+            return -1;
+        }
+    }
+    
     private int cantidadUsuarios(String usuario){
         int i = 0;
         

@@ -77,7 +77,7 @@
                         <%
                         } else {
                         %>
-                    <li><a href="visitas.jsp">Ver Visitas</a></li>
+                    <li><a href="misvisitas.jsp">Ver Visitas</a></li>
                         <% }%>
                 </ul>
 
@@ -190,7 +190,7 @@
                 int i = vis.addVisita(inst, idDocen, objetivo, dia, mes, anyo);
                 
                 if(i > 0){
-                    response.sendRedirect("vitas.jsp");
+                    response.sendRedirect("visitas.jsp");
                 }
             }
         %>
